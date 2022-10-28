@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
- fun SpinningProgressBar(
+fun SpinningProgressBar(
     modifier: Modifier = Modifier,
     show: Boolean = true
 ) {
@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
     )
 
     val backgroundColor = Color.DarkGray
-    val foregroundColor = Color.LightGray
+    val foregroundColor = Color(0xff9E9E9E)
 
     AnimatedVisibility(
         visible = show,
@@ -46,11 +46,12 @@ import androidx.compose.ui.unit.dp
             val canvasWidth = size.width
             val canvasHeight = size.height
 
-            val width = size.width * .3f
-            val height = size.height / 10
+            val width = canvasWidth * .3f
+            val height = canvasHeight / 10
 
             val cornerRadius = width.coerceAtMost(height) / 2
 
+            // Stationary items
             for (i in 0..360 step 360 / count) {
                 rotate(i.toFloat()) {
                     drawRoundRect(
@@ -64,13 +65,75 @@ import androidx.compose.ui.unit.dp
 
             val coefficient = 360f / count
 
-            for (i in 1..count / 2) {
+            // Dynamic items
+            for (i in 0..count / 2) {
                 rotate((angle.toInt() + i) * coefficient) {
                     drawRoundRect(
                         color = foregroundColor.copy(alpha = (0.2f + 0.15f * i).coerceIn(0f, 1f)),
                         topLeft = Offset(canvasWidth - width, (canvasHeight - height) / 2),
                         size = Size(width, height),
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun SpinningCircleProgressBar(
+    modifier: Modifier = Modifier,
+    show: Boolean = true
+) {
+
+    val count = 8
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val angle by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = count.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(count * 120, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    val backgroundColor = Color.DarkGray
+    val foregroundColor = Color(0xff9E9E9E)
+
+    AnimatedVisibility(
+        visible = show,
+        enter = scaleIn() + fadeIn(),
+        exit = scaleOut() + fadeOut()
+    ) {
+        Canvas(modifier = modifier.size(48.dp)) {
+
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+
+            val radius = canvasWidth * .1f
+
+            // Stationary items
+            for (i in 0..360 step 360 / count) {
+                rotate(i.toFloat()) {
+                    drawCircle(
+                        color = backgroundColor,
+                        radius = radius,
+                        center = Offset(canvasWidth - radius, canvasHeight / 2),
+                    )
+                }
+            }
+
+            val coefficient = 360f / count
+
+            // Dynamic items
+            for (i in 0..count) {
+                rotate((angle.toInt() + i) * coefficient) {
+                    drawCircle(
+                        color = foregroundColor.copy(alpha = (  i.toFloat()/count).coerceIn(0f, 1f)),
+                        radius = radius,
+                        center = Offset(canvasWidth - radius, canvasHeight / 2),
                     )
                 }
             }
