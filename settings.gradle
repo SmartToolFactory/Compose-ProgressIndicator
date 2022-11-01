@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Compose SpinnerIndicator"
+rootProject.name = "Compose Progress Indicator"
 include ':app'
-include ':spinnerindicator'
+include ':progressindicator'
