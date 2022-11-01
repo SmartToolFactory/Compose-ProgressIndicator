@@ -1,4 +1,4 @@
-package com.smarttoolfactory.spinnerindicator
+package com.smarttoolfactory.progressindicator
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SpinningProgressBar(
+fun SpinningProgressIndicator(
     modifier: Modifier = Modifier,
     show: Boolean = true
 ) {
@@ -82,7 +82,7 @@ fun SpinningProgressBar(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SpinningCircleProgressBar(
+fun SpinningCircleProgressIndicator(
     modifier: Modifier = Modifier,
     show: Boolean = true
 ) {
