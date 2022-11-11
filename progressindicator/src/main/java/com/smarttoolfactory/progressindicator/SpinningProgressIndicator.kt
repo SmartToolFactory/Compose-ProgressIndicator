@@ -3,9 +3,11 @@ package com.smarttoolfactory.progressindicator
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -33,8 +35,9 @@ fun SpinningProgressIndicator(
         )
     )
 
-    val backgroundColor = Color.DarkGray
-    val foregroundColor = Color(0xff9E9E9E)
+    val backgroundColor = Color.Gray
+//    val foregroundColor = Color(0xff9E9E9E)
+    val foregroundColor = Color(0xffCDCDCD)
 
     AnimatedVisibility(
         visible = show,
@@ -131,11 +134,83 @@ fun SpinningCircleProgressIndicator(
             for (i in 0..count) {
                 rotate((angle.toInt() + i) * coefficient) {
                     drawCircle(
-                        color = foregroundColor.copy(alpha = (  i.toFloat()/count).coerceIn(0f, 1f)),
+                        color = foregroundColor.copy(
+                            alpha = (i.toFloat() / count).coerceIn(
+                                0f,
+                                1f
+                            )
+                        ),
                         radius = radius,
                         center = Offset(canvasWidth - radius, canvasHeight / 2),
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun ScaledCircleProgressIndicator(
+    modifier: Modifier = Modifier
+) {
+    val count = 8f
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val angle by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = count,
+        infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 1100
+                count * 0.8f at 700
+                count * 0.1f at 150 with FastOutLinearInEasing
+                count * 0.10f at 150
+            }
+        )
+    )
+
+    val foregroundColor = Color.Red
+
+    val radiusList = remember { arrayListOf<Float>() }
+
+    Canvas(
+        modifier = modifier
+            .size(100.dp)
+            .border(1.dp, Color.Red)
+    ) {
+
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+
+
+        val coefficient = 360f / count
+
+        val radiusMax = canvasWidth / 2 * .1f
+
+        if (radiusList.isEmpty()) {
+            repeat(6) {
+                if (it == 0) {
+                    radiusList.add(radiusMax)
+                } else {
+                    radiusList.add(radiusList[it - 1] * 1.2f)
+                }
+            }
+        }
+
+        val radiusDynamicContainer = (canvasWidth - radiusList.last())
+
+
+        // Dynamic items
+        for (i in 0 until radiusList.size) {
+
+            val radius = radiusList[i]
+
+            rotate((angle + i) * coefficient) {
+                drawCircle(
+                    color = foregroundColor.copy(alpha = ( i * .2f).coerceIn(0f, 1f)),
+                    radius = radius,
+                    center = Offset(radiusDynamicContainer, canvasHeight / 2),
+                )
             }
         }
     }
