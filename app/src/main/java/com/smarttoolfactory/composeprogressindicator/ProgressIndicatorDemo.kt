@@ -14,6 +14,7 @@ import com.smarttoolfactory.progressindicator.*
 fun ProgressIndicatorDemo() {
     Column(
         modifier = Modifier
+            .fillMaxSize()
             .background(Color.DarkGray)
             .padding(10.dp)
     ) {
@@ -96,6 +97,31 @@ fun ProgressIndicatorDemo() {
                 color = Color(0xffEC407A)
             )
         }
-    }
 
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            DotProgressIndicator()
+            Spacer(modifier = Modifier.width(10.dp))
+            DotProgressIndicator(
+                initialColor = Color(0xffF44336),
+                animatedColor = Color(0xff29B6F6)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BouncingDotProgressIndicator()
+            Spacer(modifier = Modifier.width(10.dp))
+            BouncingDotProgressIndicator(
+                initialColor = Color(0xffF44336),
+                animatedColor = Color(0xff29B6F6)
+            )
+        }
+    }
 }

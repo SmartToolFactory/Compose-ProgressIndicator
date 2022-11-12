@@ -12,6 +12,8 @@ object IndicatorDefaults {
         Color(0xffFFEB3B),
         Color(0xffE91E63)
     )
+
+    val DotColor = Color(0xffBDBDBD)
 }
 
 enum class SpinnerShape {

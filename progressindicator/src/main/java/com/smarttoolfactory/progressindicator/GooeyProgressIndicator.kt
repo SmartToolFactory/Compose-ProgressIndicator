@@ -248,7 +248,7 @@ private fun StrokeGooeyImpl(
 
         drawPath(
             path = pathDynamic,
-            color = Color.Red,
+            color = Color(0xffE1BEE7),
             style = Stroke(1.dp.toPx(), pathEffect = chainPathEffect)
         )
     }
