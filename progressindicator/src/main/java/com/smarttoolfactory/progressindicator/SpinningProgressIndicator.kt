@@ -2,7 +2,6 @@ package com.smarttoolfactory.progressindicator
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,13 +11,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.unit.dp
-import com.smarttoolfactory.progressindicator.ui.theme.DynamicItemColor
-import com.smarttoolfactory.progressindicator.ui.theme.StaticItemColor
-
-enum class SpinnerShape {
-    Rect, RoundedRect
-}
+import com.smarttoolfactory.progressindicator.IndicatorDefaults.DynamicItemColor
+import com.smarttoolfactory.progressindicator.IndicatorDefaults.Size
+import com.smarttoolfactory.progressindicator.IndicatorDefaults.StaticItemColor
 
 /**
  * Indeterminate Material Design spinning progress indicator with rectangle or rounded rectangle
@@ -53,11 +48,7 @@ fun SpinningProgressIndicator(
         )
     )
 
-    Canvas(
-        modifier = modifier
-            .size(48.dp)
-            .border(1.dp, Color.Red)
-    ) {
+    Canvas(modifier = modifier.size(Size)) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height
