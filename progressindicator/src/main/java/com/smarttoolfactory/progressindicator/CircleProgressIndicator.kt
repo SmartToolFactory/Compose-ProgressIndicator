@@ -12,33 +12,56 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.dp
-import com.smarttoolfactory.progressindicator.ui.theme.DynamicItemColor
-import com.smarttoolfactory.progressindicator.ui.theme.StaticItemColor
+import com.smarttoolfactory.progressindicator.IndicatorDefaults.DynamicItemColor
+import com.smarttoolfactory.progressindicator.IndicatorDefaults.StaticItemColor
 
-
+/**
+ * Indeterminate Material Design spinning progress indicator with circle items
+ * shape.
+ * @param staticItemColor color of the spinning items
+ * @param dynamicItemColor color of the stationary items
+ * @param durationMillis duration of one cycle of spinning
+ */
 @Composable
 fun SpinningCircleProgressIndicator(
     modifier: Modifier = Modifier,
     staticItemColor: Color = StaticItemColor,
     dynamicItemColor: Color = DynamicItemColor,
-    durationInMillis: Int = 1000
+    durationMillis: Int = 1000
 ) {
     val count = 8
 
     val infiniteTransition = rememberInfiniteTransition()
     val angle by infiniteTransition.animateFloat(
-        initialValue = 0f, targetValue = count.toFloat(), animationSpec = infiniteRepeatable(
-            animation = tween(durationInMillis, easing = LinearEasing),
+        initialValue = 0f, targetValue = count.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = durationMillis,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Restart
         )
     )
 
-    Canvas(modifier = modifier.size(48.dp)) {
+    Canvas(modifier = modifier.size(Size)) {
 
-        val canvasWidth = size.width
-        val canvasHeight = size.height
+        var canvasWidth = size.width
+        var canvasHeight = size.height
+
+        if (canvasHeight < canvasWidth) {
+            canvasWidth = canvasHeight
+        } else {
+            canvasHeight = canvasWidth
+        }
 
         val radius = canvasWidth * .12f
+
+        val horizontalOffset = (size.width - size.height).coerceAtLeast(0f) / 2
+        val verticalOffset = (size.height - size.width).coerceAtLeast(0f) / 2
+        val center = Offset(
+            x = horizontalOffset + canvasWidth - radius,
+            y = verticalOffset + canvasHeight / 2
+        )
 
         // Stationary items
         for (i in 0..360 step 360 / count) {
@@ -46,7 +69,7 @@ fun SpinningCircleProgressIndicator(
                 drawCircle(
                     color = staticItemColor,
                     radius = radius,
-                    center = Offset(canvasWidth - radius, canvasHeight / 2),
+                    center = center,
                 )
             }
         }
@@ -63,17 +86,26 @@ fun SpinningCircleProgressIndicator(
                         )
                     ),
                     radius = radius,
-                    center = Offset(canvasWidth - radius, canvasHeight / 2),
+                    center = center,
                 )
             }
         }
     }
 }
 
+/**
+ * Indeterminate Material Design spinning progress indicator with circle items that are
+ * with each item smaller than next
+ * shape.
+ * @param staticItemColor color of the spinning items
+ * @param color color of the items
+ * @param durationMillis duration of one cycle of spinning
+ */
 @Composable
 fun ScaledCircleProgressIndicator(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.primary
+    color: Color = MaterialTheme.colorScheme.primary,
+    durationMillis: Int = 1200
 ) {
     val count = 8f
 
@@ -83,10 +115,10 @@ fun ScaledCircleProgressIndicator(
         targetValue = count,
         infiniteRepeatable(
             animation = keyframes {
-                durationMillis = 1100
-                count * 0.8f at 700
-                count * 0.1f at 150 with FastOutLinearInEasing
-                count * 0.10f at 150
+                this.durationMillis = durationMillis
+                count * 0.9f at (durationMillis * 0.8f).toInt()
+                count * 0.05f at (durationMillis * 0.1f).toInt() with FastOutLinearInEasing
+                count * 0.05f at (durationMillis * 0.1f).toInt()
             }
         )
     )
@@ -95,8 +127,14 @@ fun ScaledCircleProgressIndicator(
 
     Canvas(modifier = modifier.size(48.dp)) {
 
-        val canvasWidth = size.width
-        val canvasHeight = size.height
+        var canvasWidth = size.width
+        var canvasHeight = size.height
+
+        if (canvasHeight < canvasWidth) {
+            canvasWidth = canvasHeight
+        } else {
+            canvasHeight = canvasWidth
+        }
 
         val coefficient = 360f / count
 
@@ -114,6 +152,10 @@ fun ScaledCircleProgressIndicator(
 
         val radiusDynamicContainer = (canvasWidth - radiusList.last())
 
+        val horizontalOffset = (size.width - size.height).coerceAtLeast(0f) / 2
+        val verticalOffset = (size.height - size.width).coerceAtLeast(0f) / 2
+        val center =
+            Offset(horizontalOffset + radiusDynamicContainer, verticalOffset + canvasHeight / 2)
 
         // Dynamic items
         for (i in 0 until radiusList.size) {
@@ -122,11 +164,13 @@ fun ScaledCircleProgressIndicator(
 
             rotate((angle + i) * coefficient) {
                 drawCircle(
-                    color = color.copy(alpha = ( i * .2f).coerceIn(0f, 1f)),
+                    color = color.copy(alpha = (i * .2f).coerceIn(0f, 1f)),
                     radius = radius,
-                    center = Offset(radiusDynamicContainer, canvasHeight / 2),
+                    center = center,
                 )
             }
         }
     }
 }
+
+internal val Size = 48.0.dp
