@@ -12,14 +12,18 @@ import com.smarttoolfactory.progressindicator.*
 
 @Composable
 fun ProgressIndicatorDemo() {
-    Column(modifier = Modifier.background(Color.DarkGray)) {
+    Column(
+        modifier = Modifier
+            .background(Color.DarkGray)
+            .padding(10.dp)
+    ) {
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             SpinningProgressIndicator()
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             SpinningProgressIndicator(
                 dynamicItemColor = MaterialTheme.colorScheme.primary,
                 staticItemColor = MaterialTheme.colorScheme.onPrimary
