@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 
-
+// TODO Add bezier curves to have shake/wobble effect when circles are separated
 @Composable
 fun GooeyEffectSampleStroke(
     modifier: Modifier = Modifier
@@ -50,6 +50,9 @@ fun GooeyEffectSampleStroke(
         }
         .fillMaxSize()
 
+    val cornerPathEffect = remember {
+        PathEffect.cornerPathEffect(50f)
+    }
 
     Canvas(modifier = drawModifier) {
 
@@ -67,17 +70,17 @@ fun GooeyEffectSampleStroke(
             )
         )
 
-        pathStatic.reset()
-        pathStatic.addOval(
-            Rect(
-                center = Offset(center.x, center.y),
-                radius = 100f
+        if(pathStatic.isEmpty){
+            pathStatic.addOval(
+                Rect(
+                    center = Offset(center.x, center.y),
+                    radius = 100f
+                )
             )
-        )
+        }
 
+        pathMeasure.setPath(pathDynamic, true)
         val discretePathEffect = DiscretePathEffect(pathMeasure.length / segmentCount, 0f)
-        val cornerPathEffect = PathEffect.cornerPathEffect(50f)
-
 
         val chainPathEffect = PathEffect.chainPathEffect(
             outer = cornerPathEffect,
@@ -85,16 +88,13 @@ fun GooeyEffectSampleStroke(
         )
 
         pathDynamic.op(pathDynamic, pathStatic, PathOperation.Union)
-        pathMeasure.setPath(pathDynamic, true)
 
         drawPath(
             path = pathDynamic,
             brush = brush,
             style = Stroke(4.dp.toPx(), pathEffect = chainPathEffect)
         )
-
     }
-
 }
 
 @Composable
