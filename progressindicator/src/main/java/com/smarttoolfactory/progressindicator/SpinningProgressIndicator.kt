@@ -18,6 +18,9 @@ import com.smarttoolfactory.progressindicator.IndicatorDefaults.StaticItemColor
 /**
  * Indeterminate Material Design spinning progress indicator with rectangle or rounded rectangle
  * shape.
+ * @param staticItemCount number of stationary items. Set this value between 4 and 12 to have
+ * better results. 8 or 12 are the best options to select to have indicators similar to ones
+ * on ios/mac/web
  * @param staticItemColor color of the spinning items
  * @param dynamicItemColor color of the stationary items
  * @param spinnerShape shape of the items whether [SpinnerShape.Rect] or [SpinnerShape.RoundedRect]
@@ -26,19 +29,23 @@ import com.smarttoolfactory.progressindicator.IndicatorDefaults.StaticItemColor
 @Composable
 fun SpinningProgressIndicator(
     modifier: Modifier = Modifier,
+    @androidx.annotation.IntRange(from = 4, to = 12) staticItemCount: Int = 12,
+    dynamicItemCount: Int = staticItemCount / 2,
     staticItemColor: Color = StaticItemColor,
     dynamicItemColor: Color = DynamicItemColor,
     spinnerShape: SpinnerShape = SpinnerShape.RoundedRect,
     durationMillis: Int = 1000
 ) {
 
-    val count = 12
-    val coefficient = 360f / count
+    // Number of rotating items
+    val animatedItemCount = dynamicItemCount.coerceIn(1, staticItemCount)
+
+    val coefficient = 360f / staticItemCount
 
     val infiniteTransition = rememberInfiniteTransition()
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = count.toFloat(),
+        targetValue = staticItemCount.toFloat(),
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = durationMillis,
@@ -63,7 +70,7 @@ fun SpinningProgressIndicator(
         }
 
         val itemWidth = canvasWidth * .3f
-        val itemHeight = canvasHeight / 12
+        val itemHeight = canvasHeight / staticItemCount
 
         val cornerRadius = itemWidth.coerceAtMost(itemHeight) / 2
 
@@ -78,7 +85,7 @@ fun SpinningProgressIndicator(
         val size = Size(itemWidth, itemHeight)
 
         // Stationary items
-        for (i in 0..360 step 360 / count) {
+        for (i in 0..360 step 360 / staticItemCount) {
             rotate(i.toFloat()) {
                 if (spinnerShape == SpinnerShape.RoundedRect) {
                     drawRoundRect(
@@ -98,11 +105,14 @@ fun SpinningProgressIndicator(
         }
 
         // Dynamic items
-        for (i in 0..count / 2) {
+        for (i in 0..animatedItemCount) {
+            // angle is cast to into move in intervals of static items
             rotate((angle.toInt() + i) * coefficient) {
                 if (spinnerShape == SpinnerShape.RoundedRect) {
                     drawRoundRect(
-                        color = dynamicItemColor.copy(alpha = (0.2f + 0.15f * i).coerceIn(0f, 1f)),
+                        color = dynamicItemColor.copy(
+                            alpha = (1f / dynamicItemCount * i).coerceIn(0f, 1f)
+                        ),
                         topLeft = topLeftOffset,
                         size = size,
                         cornerRadius = CornerRadius(cornerRadius, cornerRadius)

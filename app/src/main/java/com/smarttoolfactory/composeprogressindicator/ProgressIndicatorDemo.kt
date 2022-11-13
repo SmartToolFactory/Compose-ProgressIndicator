@@ -24,10 +24,26 @@ fun ProgressIndicatorDemo() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             SpinningProgressIndicator()
+
             Spacer(modifier = Modifier.width(16.dp))
             SpinningProgressIndicator(
                 dynamicItemColor = MaterialTheme.colorScheme.primary,
                 staticItemColor = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            SpinningProgressIndicator(
+                dynamicItemColor = MaterialTheme.colorScheme.primary,
+                staticItemColor = MaterialTheme.colorScheme.onPrimary,
+                dynamicItemCount = 12
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            SpinningProgressIndicator(
+                staticItemCount = 8
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            SpinningProgressIndicator(
+                staticItemCount = 8,
+                dynamicItemCount = 6
             )
         }
 
