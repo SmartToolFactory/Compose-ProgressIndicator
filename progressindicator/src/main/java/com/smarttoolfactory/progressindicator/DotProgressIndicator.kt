@@ -48,7 +48,8 @@ fun BouncingDotProgressIndicator(
     val sameColor = initialColor == animatedColor
 
     Canvas(
-        modifier = modifier
+        modifier
+            .progressSemantics()
             .size(96.dp, 48.dp)
             .padding(8.dp)
     ) {
@@ -109,7 +110,8 @@ fun DotProgressIndicator(
     val sameColor = initialColor == animatedColor
 
     Canvas(
-        modifier = modifier
+        modifier
+            .progressSemantics()
             .size(96.dp, 48.dp)
             .padding(8.dp)
     ) {

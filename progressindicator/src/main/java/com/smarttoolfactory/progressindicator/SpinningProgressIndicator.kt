@@ -48,7 +48,10 @@ fun SpinningProgressIndicator(
         )
     )
 
-    Canvas(modifier = modifier.size(Size)) {
+    Canvas(modifier = modifier
+        .progressSemantics()
+        .size(Size)
+    ) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height

@@ -95,7 +95,7 @@ private fun FilledGooeyIndicatorImpl(
 
     val paint = remember {
         Paint().apply {
-            color = Color.Red.copy(alpha = .7f)
+            color = Color.Red
         }
     }
 
@@ -104,7 +104,11 @@ private fun FilledGooeyIndicatorImpl(
     }
 
 
-    Canvas(modifier.size(48.dp)) {
+    Canvas(
+        modifier
+            .progressSemantics()
+            .size(Size)
+    ) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height
@@ -187,7 +191,11 @@ private fun StrokeGooeyImpl(
     segmentCount: Int
 ) {
 
-    Canvas(modifier.size(48.dp)) {
+    Canvas(
+        modifier
+            .progressSemantics()
+            .size(Size)
+    ) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height

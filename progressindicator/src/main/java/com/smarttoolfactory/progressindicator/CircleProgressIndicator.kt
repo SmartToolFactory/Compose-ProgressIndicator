@@ -43,7 +43,11 @@ fun SpinningCircleProgressIndicator(
         )
     )
 
-    Canvas(modifier = modifier.size(Size)) {
+    Canvas(
+        modifier
+            .progressSemantics()
+            .size(Size)
+    ) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height
@@ -97,7 +101,6 @@ fun SpinningCircleProgressIndicator(
  * Indeterminate Material Design spinning progress indicator with circle items that are
  * with each item smaller than next
  * shape.
- * @param staticItemColor color of the spinning items
  * @param color color of the items
  * @param durationMillis duration of one cycle of spinning
  */
@@ -125,7 +128,11 @@ fun ScaledCircleProgressIndicator(
 
     val radiusList = remember { arrayListOf<Float>() }
 
-    Canvas(modifier = modifier.size(48.dp)) {
+    Canvas(
+        modifier
+            .progressSemantics()
+            .size(Size)
+    ) {
 
         var canvasWidth = size.width
         var canvasHeight = size.height
