@@ -119,6 +119,8 @@ fun ProgressIndicatorDemo() {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            DotProgressIndicator(modifier = Modifier.size(60.dp, 30.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             DotProgressIndicator()
             Spacer(modifier = Modifier.width(10.dp))
             DotProgressIndicator(
@@ -132,6 +134,8 @@ fun ProgressIndicatorDemo() {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            BouncingDotProgressIndicator(modifier = Modifier.size(60.dp, 30.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             BouncingDotProgressIndicator()
             Spacer(modifier = Modifier.width(10.dp))
             BouncingDotProgressIndicator(
