@@ -12,7 +12,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
+import com.smarttoolfactory.progressindicator.util.scale
 
+/**
+ * Bouncing dot progress indicator that draws 3 dots that constantly bouncing after the dot on its
+ * left.
+ * If [initialColor] and [animatedColor] are not same colors color is animated
+ * from [initialColor] to [animatedColor]
+ *
+ * @param initialColor color that is initially set with animation
+ * @param animatedColor color that is set after animation
+ */
 @Composable
 fun BouncingDotProgressIndicator(
     modifier: Modifier = Modifier,
@@ -50,7 +60,7 @@ fun BouncingDotProgressIndicator(
     Canvas(
         modifier
             .progressSemantics()
-            .size(96.dp, 48.dp)
+            .size(Size * 2, Size)
             .padding(8.dp)
     ) {
         val canvasWidth = size.width
@@ -79,6 +89,14 @@ fun BouncingDotProgressIndicator(
     }
 }
 
+/**
+ * Dot progress indicator that draws 3 dots that constantly changing radius after the one
+ * next to it. If [initialColor] and [animatedColor] are not same colors color is animated
+ * from [initialColor] to [animatedColor]
+ *
+ * @param initialColor color that is initially set with animation
+ * @param animatedColor color that is set after animation
+ */
 @Composable
 fun DotProgressIndicator(
     modifier: Modifier = Modifier,
@@ -86,11 +104,13 @@ fun DotProgressIndicator(
     animatedColor: Color = IndicatorDefaults.DotColor
 ) {
 
+    val initialValue = 0.25f
+
     val dotAnimatables = remember {
         listOf(
-            Animatable(0.25f),
-            Animatable(0.25f),
-            Animatable(0.25f)
+            Animatable(initialValue),
+            Animatable(initialValue),
+            Animatable(initialValue)
         )
     }
     dotAnimatables.forEachIndexed { index, animatable ->
@@ -112,7 +132,7 @@ fun DotProgressIndicator(
     Canvas(
         modifier
             .progressSemantics()
-            .size(96.dp, 48.dp)
+            .size(Size * 2, Size)
             .padding(8.dp)
     ) {
         val canvasWidth = size.width
@@ -124,14 +144,15 @@ fun DotProgressIndicator(
         dotAnimatables.forEachIndexed { index, animatable ->
             val x = radius + index * (diameter)
             val value = animatable.value
-
+            val colorFraction =
+                scale(start1 = initialValue, end1 = 1f, pos = value, start2 = 0f, end2 = 1f)
 
             drawCircle(
                 color = if (sameColor) initialColor.copy(alpha = value) else
                     lerp(
                         initialColor,
                         animatedColor,
-                        value
+                        colorFraction
                     ),
                 center = Offset(
                     x = x,
