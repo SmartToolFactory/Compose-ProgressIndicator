@@ -5,5 +5,5 @@ Customizable progress indicators on ios/mac/Web, circle, scaled circle, gooey(st
 indicators written with Jetpack Compose
 
 
-https://user-images.githubusercontent.com/35650605/201479819-f4b15543-5aef-4886-9469-9b8ee368c792.mp4
+https://user-images.githubusercontent.com/35650605/201734921-d030df52-13aa-4572-b97a-f1207aa279fc.mp4
 
